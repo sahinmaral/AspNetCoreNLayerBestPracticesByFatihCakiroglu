@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
-using NLayer.Core;
-
+using NLayer.Core.Models;
+using NLayer.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +15,7 @@ namespace NLayer.Repository.Repositories
         protected readonly AppDbContext _appDbContext;
         private readonly DbSet<T> _dbSet;
 
-        public GenericRepository(AppDbContext appDbContext, DbSet<T> dbSet)
+        public GenericRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
             _dbSet = _appDbContext.Set<T>();
@@ -47,7 +46,7 @@ namespace NLayer.Repository.Repositories
             _dbSet.RemoveRange(entities);
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> expression)
+        public IQueryable<T> GetAll()
         {
             return _dbSet.AsNoTracking().AsQueryable();
         }

@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLayer.Core
+namespace NLayer.Core.DTOs
 {
-    public class Category : BaseEntity
+    public class CategoryDto : BaseDto
     {
         public string Name { get; set; }
-
-        // Navigation property
-        public ICollection<Product> Products { get; set; }
     }
 }

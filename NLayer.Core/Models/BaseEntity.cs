@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NLayer.Core
+namespace NLayer.Core.Models
 {
     // Entity lerimizin base yapisi oldugu icin instance olusturmak istemiyoruz
     // bu yuzden abstract olarak olusturduk.
