@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using NLayer.API.Filters;
 using NLayer.Core.DTOs;
 using NLayer.Core.Models;
 using NLayer.Core.Services;
@@ -12,15 +13,13 @@ namespace NLayer.API.Controllers
     
     public class ProductsController : CustomBaseController
     {
-        private readonly IProductService _productService;
-        private readonly IService<Product> _service;
+        private readonly IProductService _service;
         private readonly IMapper _mapper;
 
-        public ProductsController(IService<Product> service, IMapper mapper,IProductService productService)
+        public ProductsController( IMapper mapper,IProductService productService)
         {
-            _service = service;
             _mapper = mapper;
-            _productService = productService;
+            _service = productService;
         }
 
         [HttpGet]
@@ -33,6 +32,7 @@ namespace NLayer.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Product>))]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var product = await _service.GetByIdAsync(id);
@@ -59,6 +59,7 @@ namespace NLayer.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Product>))]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             var product = await _service.GetByIdAsync(id);
@@ -70,7 +71,7 @@ namespace NLayer.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetProductsWithCategory()
         {
-            var productsWithCategoryDto = await _productService.GetProductsWithCategory();
+            var productsWithCategoryDto = await _service.GetProductsWithCategory();
             return CreateActionResult(productsWithCategoryDto);
         }
 

@@ -2,7 +2,9 @@
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
+using NLayer.API.Filters;
 using NLayer.Core.DTOs;
 using NLayer.Core.Models;
 using NLayer.Core.Services;
@@ -23,6 +25,7 @@ namespace NLayer.API.Controllers
         }
 
         [HttpGet("[action]/{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Category>))]
         public async Task<IActionResult> GetSingleCategoryByIdWithProducts(int id)
         {
             return CreateActionResult(await _categoryService.GetSingleCategoryByIdWithProducts(id));
@@ -31,6 +34,8 @@ namespace NLayer.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
+
+
             var categories = await _service.GetAllAsync();
             var categoryDtos = _mapper.Map<List<CategoryDto>>(categories.ToList());
 
@@ -38,6 +43,7 @@ namespace NLayer.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Category>))]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
             var category = await _service.GetByIdAsync(id);
@@ -55,12 +61,13 @@ namespace NLayer.API.Controllers
             return CreateActionResult(CustomResponseDto<CategoryDto>.Success(201, createdCategoryDto));
         }
 
-        //[HttpPut]
-        //public async Task<IActionResult> UpdateAsync(CategoryUpdateDto categoryDto)
-        //{
-        //    await _service.UpdateAsync(_mapper.Map<Category>(categoryDto));
+        [HttpPut]
+        [ServiceFilter(typeof(NotFoundFilter<Category>))]
+        public async Task<IActionResult> UpdateAsync(CategoryUpdateDto categoryDto)
+        {
+            await _service.UpdateAsync(_mapper.Map<Category>(categoryDto));
 
-        //    return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
-        //}
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
+        }
     }
 }
