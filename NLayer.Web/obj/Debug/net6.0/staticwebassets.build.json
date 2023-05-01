@@ -1,11 +1,23 @@
 {
   "Version": 1,
-  "Hash": "ioGq3tGo0cc8inDwjolRe9IqozFvw7AOXapKk8qXrNA=",
+  "Hash": "ntdO1/jcrTO2ZECdiSa/kdjY9vSrhMgcxJoeX0EBVHw=",
   "Source": "NLayer.Web",
   "BasePath": "_content/NLayer.Web",
   "Mode": "Default",
   "ManifestType": "Build",
-  "ReferencedProjectsConfiguration": [],
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "C:\\Users\\sahin\\Desktop\\AspNetCoreNLayerBestPracticesByFatihCakiroglu\\NLayer.API\\NLayer.API.csproj",
+      "Version": 2,
+      "Source": "NLayer.API",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework"
+    }
+  ],
   "DiscoveryPatterns": [
     {
       "Name": "NLayer.Web\\wwwroot",

@@ -18,6 +18,52 @@ namespace NLayer.Repository
 
         }
 
+        public override int SaveChanges()
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if (entry.Entity is BaseEntity entityReference)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            entityReference.CreatedDate = DateTime.Now;
+                            break;
+                        case EntityState.Modified:
+                            entityReference.UpdatedDate = DateTime.Now;
+                            break;
+                    }
+                }
+            }
+
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            foreach (var entry in ChangeTracker.Entries())
+            {
+                if(entry.Entity is BaseEntity entityReference)
+                {
+                    switch (entry.State)
+                    {
+                        case EntityState.Added:
+                            Entry(entityReference).Property(x => x.UpdatedDate).IsModified = false;
+
+                            entityReference.CreatedDate= DateTime.Now;
+                            break;
+                        case EntityState.Modified:
+                            Entry(entityReference).Property(x => x.CreatedDate).IsModified = false;
+
+                            entityReference.UpdatedDate= DateTime.Now;
+                            break;
+                    }
+                }
+            }
+
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Repository class library uzerindeki configuration lari uygular.

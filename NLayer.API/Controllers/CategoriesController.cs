@@ -34,8 +34,6 @@ namespace NLayer.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-
-
             var categories = await _service.GetAllAsync();
             var categoryDtos = _mapper.Map<List<CategoryDto>>(categories.ToList());
 

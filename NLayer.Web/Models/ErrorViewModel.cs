@@ -2,8 +2,7 @@ namespace NLayer.Web.Models
 {
     public class ErrorViewModel
     {
-        public string? RequestId { get; set; }
+        public List<string> Errors { get; set; } = new List<string>();
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
     }
 }
