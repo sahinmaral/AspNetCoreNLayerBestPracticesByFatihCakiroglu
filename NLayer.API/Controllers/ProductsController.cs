@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 using NLayer.API.Filters;
 using NLayer.Core.DTOs;
@@ -10,7 +10,7 @@ using NLayer.Core.Services;
 
 namespace NLayer.API.Controllers
 {
-    
+
     public class ProductsController : CustomBaseController
     {
         private readonly IProductService _service;
@@ -42,7 +42,7 @@ namespace NLayer.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(ProductDto productDto)
+        public async Task<IActionResult> AddAsync(ProductCreateDto productDto)
         {
             var product = await _service.AddAsync(_mapper.Map<Product>(productDto));
             var createdProductDto = _mapper.Map<ProductDto>(product);
@@ -68,12 +68,31 @@ namespace NLayer.API.Controllers
             return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
         }
 
+        [HttpDelete("DeleteRange")]
+        [ServiceFilter(typeof(NotFoundFilter<Product>))]
+        public async Task<IActionResult> DeleteRangeAsync(IEnumerable<int> ids)
+        {
+            var products = await _service.Where(x => ids.Contains(x.Id)).ToListAsync();
+            await _service.DeleteRangeAsync(products);
+
+            return CreateActionResult(CustomResponseDto<NoContentDto>.Success(204));
+        }
+
         [HttpGet("[action]")]
         public async Task<IActionResult> GetProductsWithCategory()
         {
-            var productsWithCategoryDto = await _service.GetProductsWithCategory();
-            return CreateActionResult(productsWithCategoryDto);
+            return CreateActionResult(await _service.GetProductsWithCategory());
         }
+
+        [HttpPost("AddRange")]
+        public async Task<IActionResult> AddRangeAsync(IEnumerable<ProductCreateDto> dtos)
+        {
+            IEnumerable<Product> products = await _service.AddRangeAsync(_mapper.Map<IEnumerable<Product>>(dtos));
+            var createdProductDtos = _mapper.Map<IEnumerable<ProductCreateDto>>(products);
+
+            return CreateActionResult(CustomResponseDto<IEnumerable<ProductCreateDto>>.Success(201, createdProductDtos));
+        }
+
 
     }
 }
